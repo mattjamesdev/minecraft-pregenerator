@@ -20,6 +20,7 @@
 
 import time
 import datetime
+import platform
 
 import keyboard as kb
 
@@ -54,8 +55,12 @@ def main(xmin, xmax, zmin, zmax, step_size, delay):
     z_no_steps = int((zmax - zmin)/step_size)
     no_of_tps = x_no_steps*z_no_steps
 
-    # Approximate the time it will take
-    hours, minutes, seconds = seconds_to_time(int(4*(delay+1)*no_of_tps))
+    # Approximate the time it will take to run.
+    # If running on macOS, there is a short delay between typing each character, 
+    # whereas on Windows the commands are typed out almost instantly. The 
+    # "keydelay" variable is there to accommodate for this. 
+    keydelay = 0 if platform.system() == 'Windows' else 1
+    hours, minutes, seconds = seconds_to_time(int(4*(delay+keydelay)*no_of_tps))
     timestring = get_timestring(hours, minutes, seconds)
 
     print(f'This will teleport to {no_of_tps} different locations, taking')
