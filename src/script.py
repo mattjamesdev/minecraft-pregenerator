@@ -45,8 +45,10 @@ def command_executer(xmin, x_steps, zmin, z_steps, step_size, delay):
             coords = (xmin + step_size*x_step, 192, zmin + step_size*z_step)
             for n in range(4):
                 yaw_angle = -180.0 + n*90
-                kb.send('enter')
+                kb.send('t')
+                time.sleep(0.05)
                 kb.write(tp_command(coords, yaw_angle))
+                time.sleep(0.05)
                 kb.send('enter')
                 time.sleep(delay)
 
@@ -60,7 +62,7 @@ def main(xmin, xmax, zmin, zmax, step_size, delay):
     # whereas on Windows the commands are typed out almost instantly. The 
     # "keydelay" variable is there to accommodate for this. 
     keydelay = 0 if platform.system() == 'Windows' else 1
-    hours, minutes, seconds = seconds_to_time(int(4*(delay+keydelay)*no_of_tps))
+    hours, minutes, seconds = seconds_to_time(int(4*(delay+keydelay+0.2)*no_of_tps))
     timestring = get_timestring(hours, minutes, seconds)
 
     print(f'This will teleport to {no_of_tps} different locations, taking')
