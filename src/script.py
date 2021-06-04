@@ -92,4 +92,4 @@ def main(xmin, xmax, zmin, zmax, step_size, delay):
 
 if __name__ == '__main__':
     # Format: (xmin, xmax, zmin, zmax, no of blocks between tps, tp delay in seconds)
-    main(-2880, 2880, -2880, 2880, 240, 1)
+    main(-2880, 2880, -2880, 2880, 240, 2)

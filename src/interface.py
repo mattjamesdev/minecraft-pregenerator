@@ -37,8 +37,8 @@ def interface():
                     continue
                 break
 
-            delay_input = input('Enter a time to wait between teleports in seconds (default 1): ')
-            delay = int(delay_input) if delay_input else 1
+            delay_input = input('Enter a time to wait between teleports in seconds (default 2): ')
+            delay = int(delay_input) if delay_input else 2
             print()
             break
         except ValueError:
