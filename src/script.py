@@ -65,8 +65,8 @@ def main(xmin, xmax, zmin, zmax, step_size, delay):
     hours, minutes, seconds = seconds_to_time(int(4*(delay+keydelay+0.2)*no_of_tps))
     timestring = get_timestring(hours, minutes, seconds)
 
-    print(f'This will teleport to {no_of_tps} different locations, taking')
-    print(f'approximately {timestring}. \n')
+    print(f'This will teleport to {no_of_tps} different locations.')
+    print(f'It will take approximately {timestring}. \n')
     time.sleep(1)
     print('*** IMPORTANT ***')
     print('Once you continue, you will have 10 seconds before the script begins typing.') 
@@ -75,7 +75,7 @@ def main(xmin, xmax, zmin, zmax, step_size, delay):
     if answer.lower() != 'y':
         print('"n" or invalid answer entered. Aborting.')
         return
-    print('You have 10 seconds to make minecraft the active window.')
+    print('You have 10 seconds to make Minecraft the active window.')
     time.sleep(7)
     print('Starting in 3')
     time.sleep(1)
