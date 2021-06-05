@@ -28,8 +28,11 @@ def interface():
                 print('Maximum must be greater than minimum.')
                 continue
             
-            height_input = input('Enter a height (y-value) (default 192): ')
+            height_input = input('Enter a height (y-value) greater than 0 (default 192): ')
             height = int(height_input) if height_input else 192
+            if height <= 0:
+                print('Height must be greater than 0.')
+                continue
 
             # When getting the step size, also check that it is positive.
             while True:
