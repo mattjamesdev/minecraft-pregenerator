@@ -27,6 +27,9 @@ def interface():
             if zmax <= zmin:
                 print('Maximum must be greater than minimum.')
                 continue
+            
+            height_input = input('Enter a height (y-value) (default 192): ')
+            height = int(height_input) if height_input else 192
 
             # When getting the step size, also check that it is positive.
             while True:
@@ -46,7 +49,7 @@ def interface():
             print()
             continue
     
-    main(xmin, xmax, zmin, zmax, step_size, delay)
+    main(xmin, xmax, zmin, zmax, height, step_size, delay)
 
 if __name__ == '__main__':
     interface()

@@ -39,10 +39,10 @@ def tp_command(location, yaw=-180.0, pitch=20.0):
     return f'/tp @p {location[0]} {location[1]} {location[2]} {yaw} {pitch}'
 
 # The main bulk of the script.
-def command_executer(xmin, x_steps, zmin, z_steps, step_size, delay):
+def command_executer(xmin, x_steps, zmin, z_steps, y_height, step_size, delay):
     for z_step in range(z_steps):
         for x_step in range(x_steps):
-            coords = (xmin + step_size*x_step, 192, zmin + step_size*z_step)
+            coords = (xmin + step_size*x_step, y_height, zmin + step_size*z_step)
             for n in range(4):
                 yaw_angle = -180.0 + n*90
                 kb.send('t')
@@ -52,7 +52,7 @@ def command_executer(xmin, x_steps, zmin, z_steps, step_size, delay):
                 kb.send('enter')
                 time.sleep(delay)
 
-def main(xmin, xmax, zmin, zmax, step_size, delay):
+def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     x_no_steps = int((xmax - xmin)/step_size)
     z_no_steps = int((zmax - zmin)/step_size)
     no_of_tps = x_no_steps*z_no_steps
@@ -86,7 +86,7 @@ def main(xmin, xmax, zmin, zmax, step_size, delay):
     print('Starting teleports...')
     start_time = int(time.time())
 
-    command_executer(xmin, x_no_steps, zmin, z_no_steps, step_size, delay)
+    command_executer(xmin, x_no_steps, zmin, z_no_steps, height, step_size, delay)
     
     end_time = int(time.time())
     hours_taken, minutes_taken, seconds_taken = seconds_to_time(end_time - start_time)
@@ -94,4 +94,4 @@ def main(xmin, xmax, zmin, zmax, step_size, delay):
 
 if __name__ == '__main__':
     # Format: (xmin, xmax, zmin, zmax, no of blocks between tps, tp delay in seconds)
-    main(-2880, 2880, -2880, 2880, 240, 2)
+    main(-2880, 2880, -2880, 2880, 192, 240, 2)
