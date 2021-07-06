@@ -30,13 +30,16 @@ def seconds_to_time(secs):
     hours, minutes, seconds = (int(i) for i in delta.split(':'))
     return hours, minutes, seconds
 
+
 def get_timestring(hours, minutes, seconds):
     return f'{hours} {"hour" if hours==1 else "hours"}, {minutes} {"minute" if minutes==1 else "minutes"}, and {seconds} {"second" if seconds==1 else "seconds"}'
+
 
 # Generate the command to write.
 # location is a 3-tuple (x, y, z) of the desired coordinates
 def tp_command(location, yaw=-180.0, pitch=20.0):
     return f'/tp @p {location[0]} {location[1]} {location[2]} {yaw} {pitch}'
+
 
 # The main bulk of the script.
 def command_executer(xmin, x_steps, zmin, z_steps, y_height, step_size, delay):
@@ -51,6 +54,7 @@ def command_executer(xmin, x_steps, zmin, z_steps, y_height, step_size, delay):
                 time.sleep(0.05)
                 kb.send('enter')
                 time.sleep(delay)
+
 
 def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     x_no_steps = int((xmax - xmin)/step_size) + 1
@@ -71,10 +75,12 @@ def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     print('*** IMPORTANT ***')
     print('Once you continue, you will have 10 seconds before the script begins typing.') 
     print('Remember to make Minecraft the active window before then! \n')
+    
     answer = input('Do you wish to proceed? [y/n]: ')
     if answer.lower() != 'y':
         print('"n" or invalid answer entered. Aborting.')
         return
+    
     print('You have 10 seconds to make Minecraft the active window.')
     time.sleep(7)
     print('Starting in 3')
@@ -84,13 +90,14 @@ def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     print('Starting in 1')
     time.sleep(1)
     print('Starting teleports...')
-    start_time = int(time.time())
-
-    command_executer(xmin, x_no_steps, zmin, z_no_steps, height, step_size, delay)
     
+    start_time = int(time.time())
+    command_executer(xmin, x_no_steps, zmin, z_no_steps, height, step_size, delay)
     end_time = int(time.time())
+    
     hours_taken, minutes_taken, seconds_taken = seconds_to_time(end_time - start_time)
     print(f'Teleports complete in {get_timestring(hours_taken, minutes_taken, seconds_taken)}')
+
 
 if __name__ == '__main__':
     # Format: (xmin, xmax, zmin, zmax, no of blocks between tps, tp delay in seconds)
