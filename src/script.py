@@ -53,8 +53,8 @@ def command_executer(xmin, x_steps, zmin, z_steps, y_height, step_size, delay):
                 time.sleep(delay)
 
 def main(xmin, xmax, zmin, zmax, height, step_size, delay):
-    x_no_steps = int((xmax - xmin)/step_size)
-    z_no_steps = int((zmax - zmin)/step_size)
+    x_no_steps = int((xmax - xmin)/step_size) + 1
+    z_no_steps = int((zmax - zmin)/step_size) + 1
     no_of_tps = x_no_steps*z_no_steps
 
     # Approximate the time it will take to run.
