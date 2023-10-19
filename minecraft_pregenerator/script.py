@@ -74,10 +74,9 @@ def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     # "keydelay" variable is there to accommodate for this. 
     keydelay = 0 if platform.system() == 'Windows' else 1
     hours, minutes, seconds = seconds_to_time(int(4*(delay+keydelay+0.2)*no_of_tps))
-    timestring = get_timestring(hours, minutes, seconds)
 
     print(f'This will teleport to {no_of_tps} different locations.')
-    print(f'It will take approximately {timestring}. \n')
+    print(f'It will take approximately {hours}h {minutes}m {seconds}s.\n')
     time.sleep(1)
     print('*** IMPORTANT ***')
     print('Once you continue, you will have 10 seconds before the script begins typing.') 
@@ -103,7 +102,7 @@ def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     end_time = int(time.time())
     
     hours_taken, minutes_taken, seconds_taken = seconds_to_time(end_time - start_time)
-    print(f'Teleports complete in {get_timestring(hours_taken, minutes_taken, seconds_taken)}')
+    print(f'Teleports complete in {hours_taken}h {minutes_taken}m {seconds_taken}s')
 
 
 if __name__ == '__main__':
