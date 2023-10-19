@@ -39,12 +39,14 @@ def seconds_to_time(seconds: int) -> tuple[int, int, int]:
     tuple[int, int, int]
         The number of hours, minutes, and seconds.
     """
-    hours, seconds = divmod(seconds, 60*60)
+    hours, seconds = divmod(seconds, 60 * 60)
     minutes, seconds = divmod(seconds, 60)
     return hours, minutes, seconds
 
 
-def tp_command(location: tuple[int, int, int], yaw: float = -180.0, pitch: float = 20.0) -> str:
+def tp_command(
+    location: tuple[int, int, int], yaw: float = -180.0, pitch: float = 20.0
+) -> str:
     """
     Generate the `/tp` command to write given coordinates, pitch, and yaw.
 
@@ -63,11 +65,19 @@ def tp_command(location: tuple[int, int, int], yaw: float = -180.0, pitch: float
         Formatted teleport command. Example:
         `/tp @p 100 64 200 -180.0 20.0`
     """
-    return f'/tp @p {location[0]} {location[1]} {location[2]} {yaw} {pitch}'
+    return f"/tp @p {location[0]} {location[1]} {location[2]} {yaw} {pitch}"
 
 
 # The main bulk of the script.
-def execute_commands(x_min: int, x_steps: int, z_min: int, z_steps: int, y_height: int, step_size: int, delay: float) -> None:
+def execute_commands(
+    x_min: int,
+    x_steps: int,
+    z_min: int,
+    z_steps: int,
+    y_height: int,
+    step_size: int,
+    delay: float,
+) -> None:
     """
     Type out a series of `/tp` commands to teleport the player around.
 
@@ -91,19 +101,27 @@ def execute_commands(x_min: int, x_steps: int, z_min: int, z_steps: int, y_heigh
     # Grid of teleports
     for z_step in range(z_steps):
         for x_step in range(x_steps):
-            coords = (x_min + step_size*x_step, y_height, z_min + step_size*z_step)
+            coords = (x_min + step_size * x_step, y_height, z_min + step_size * z_step)
             # Face four different directions to generate terrain all around the player
             for n in range(4):
-                yaw_angle = -180.0 + n*90
-                kb.send('t')  # Open the chat in Minecraft
+                yaw_angle = -180.0 + n * 90
+                kb.send("t")  # Open the chat in Minecraft
                 time.sleep(0.05)
                 kb.write(tp_command(coords, yaw_angle))
                 time.sleep(0.05)
-                kb.send('enter')
+                kb.send("enter")
                 time.sleep(delay)
 
 
-def main(x_min: int, x_max: int, z_min: int, z_max: int, height: int, step_size: int, delay: float) -> None:
+def main(
+    x_min: int,
+    x_max: int,
+    z_min: int,
+    z_max: int,
+    height: int,
+    step_size: int,
+    delay: float,
+) -> None:
     """
     Run the execution script. The main purpose of this function (instead of just using
     `execute_commands`) is to provide the user some info before actually starting the
@@ -126,51 +144,51 @@ def main(x_min: int, x_max: int, z_min: int, z_max: int, height: int, step_size:
     delay : float
         Time in seconds to wait between teleport commands.
     """
-    x_no_steps = int((x_max - x_min)/step_size) + 1
-    z_no_steps = int((z_max - z_min)/step_size) + 1
-    no_of_tps = x_no_steps*z_no_steps
+    x_no_steps = int((x_max - x_min) / step_size) + 1
+    z_no_steps = int((z_max - z_min) / step_size) + 1
+    no_of_tps = x_no_steps * z_no_steps
 
     # Approximate the time it will take to run.
-    # If running on macOS, there is a short delay between typing each character, 
-    # whereas on Windows the commands are typed out almost instantly. The 
-    # `keydelay` variable is there to accommodate for this. 
-    keydelay = 0 if platform.system() == 'Windows' else 1
-    duration_in_seconds = int(4*(delay+keydelay+0.2)*no_of_tps)
+    # If running on macOS, there is a short delay between typing each character,
+    # whereas on Windows the commands are typed out almost instantly. The
+    # `keydelay` variable is there to accommodate for this.
+    keydelay = 0 if platform.system() == "Windows" else 1
+    duration_in_seconds = int(4 * (delay + keydelay + 0.2) * no_of_tps)
     hours, minutes, seconds = seconds_to_time(duration_in_seconds)
 
     print(
-        f'This will teleport to {no_of_tps} different locations.\n'
-        f'It will take approximately {hours}h {minutes}m {seconds}s.\n'
+        f"This will teleport to {no_of_tps} different locations.\n"
+        f"It will take approximately {hours}h {minutes}m {seconds}s.\n"
     )
     time.sleep(1)
     print(
-        '*** IMPORTANT ***\n'
-        'Once you continue, you will have 10 seconds before the script begins typing.\n'
-        'Remember to make Minecraft the active window before then! \n'
+        "*** IMPORTANT ***\n"
+        "Once you continue, you will have 10 seconds before the script begins typing.\n"
+        "Remember to make Minecraft the active window before then! \n"
     )
-    
+
     # Get user confirmation
-    answer = input('Do you wish to proceed? [y/n]: ')
-    if answer.lower() != 'y':
+    answer = input("Do you wish to proceed? [y/n]: ")
+    if answer.lower() != "y":
         print("'n' or invalid answer entered. Aborting.")
         return
-    
-    print('You have 10 seconds to make Minecraft the active window.')
+
+    print("You have 10 seconds to make Minecraft the active window.")
     # Final countdooooooown
     for i in range(10):
         print(f"Starting in {10-i}", end="\r")
         time.sleep(1)
-    print('Starting teleports...')
-    
+    print("Starting teleports...")
+
     # Write the commands, recording time taken
     start_time = int(time.time())
     execute_commands(x_min, x_no_steps, z_min, z_no_steps, height, step_size, delay)
     end_time = int(time.time())
-    
+
     hours_taken, minutes_taken, seconds_taken = seconds_to_time(end_time - start_time)
-    print(f'Teleports complete in {hours_taken}h {minutes_taken}m {seconds_taken}s')
+    print(f"Teleports complete in {hours_taken}h {minutes_taken}m {seconds_taken}s")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Format: (xmin, xmax, zmin, zmax, no of blocks between tps, tp delay in seconds)
     main(-2880, 2880, -2880, 2880, 192, 240, 2)
