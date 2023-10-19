@@ -25,14 +25,19 @@ import platform
 import keyboard as kb
 
 
-def seconds_to_time(secs):
-    delta = str(datetime.timedelta(seconds=secs))
-    hours, minutes, seconds = (int(i) for i in delta.split(':'))
-    return hours, minutes, seconds
+def seconds_to_time(seconds: int) -> tuple[int, int, int]:
+    """
+    Given a duration in seconds, returns the number of hours, minutes, and seconds of
+    that duration.
 
+    Parameters:
+    seconds (int)
+        A time duration in seconds.
 
-def get_timestring(hours, minutes, seconds):
-    return f'{hours} {"hour" if hours==1 else "hours"}, {minutes} {"minute" if minutes==1 else "minutes"}, and {seconds} {"second" if seconds==1 else "seconds"}'
+    Returns:
+    (tuple[int, int, int])
+        The number of hours, minutes, and seconds.
+    """
 
 
 # Generate the command to write.
