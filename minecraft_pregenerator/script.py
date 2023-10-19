@@ -29,12 +29,14 @@ def seconds_to_time(seconds: int) -> tuple[int, int, int]:
     Given a duration in seconds, returns the number of hours, minutes, and seconds of
     that duration.
 
-    Parameters:
-    seconds (int)
+    Parameters
+    ----------
+    seconds : int
         A time duration in seconds.
 
-    Returns:
-    (tuple[int, int, int])
+    Returns
+    -------
+    tuple[int, int, int]
         The number of hours, minutes, and seconds.
     """
     hours, seconds = divmod(seconds, 60*60)
@@ -42,20 +44,58 @@ def seconds_to_time(seconds: int) -> tuple[int, int, int]:
     return hours, minutes, seconds
 
 
-# Generate the command to write.
-# location is a 3-tuple (x, y, z) of the desired coordinates
-def tp_command(location, yaw=-180.0, pitch=20.0):
+def tp_command(location: tuple[int, int, int], yaw: float = -180.0, pitch: float = 20.0) -> str:
+    """
+    Generate the `/tp` command to write given coordinates, pitch, and yaw.
+
+    Parameters
+    ----------
+    location : tuple[int, int, int]
+        A 3-tuple (x, y, z) of the desired coordinates.
+    yaw : float, default -180.0
+        Yaw (horizontal direction) to face when teleporting.
+    pitch : float, default 20.0
+        Pitch (vertical direction) to face when teleporting.
+
+    Returns
+    -------
+    str
+        Formatted teleport command. Example:
+        `/tp @p 100 64 200 -180.0 20.0`
+    """
     return f'/tp @p {location[0]} {location[1]} {location[2]} {yaw} {pitch}'
 
 
 # The main bulk of the script.
-def command_executer(xmin, x_steps, zmin, z_steps, y_height, step_size, delay):
+def execute_commands(x_min: int, x_steps: int, z_min: int, z_steps: int, y_height: int, step_size: int, delay: float) -> None:
+    """
+    Type out a series of `/tp` commands to teleport the player around.
+
+    Parameters
+    ----------
+    x_min : int
+        Starting x-coordinate.
+    x_steps : int
+        Number of steps to take in the x-direction.
+    z_min : int
+        Starting z-coordinate.
+    z_steps : int
+        Number of steps to take in the z-direction.
+    y_height : int
+        y-coordinate to teleport to.
+    step_size : int
+        How far to step in each direction (except y).
+    delay : float
+        Time in seconds to wait between teleport commands.
+    """
+    # Grid of teleports
     for z_step in range(z_steps):
         for x_step in range(x_steps):
-            coords = (xmin + step_size*x_step, y_height, zmin + step_size*z_step)
+            coords = (x_min + step_size*x_step, y_height, z_min + step_size*z_step)
+            # Face four different directions to generate terrain all around the player
             for n in range(4):
                 yaw_angle = -180.0 + n*90
-                kb.send('t')
+                kb.send('t')  # Open the chat in Minecraft
                 time.sleep(0.05)
                 kb.write(tp_command(coords, yaw_angle))
                 time.sleep(0.05)
@@ -63,9 +103,31 @@ def command_executer(xmin, x_steps, zmin, z_steps, y_height, step_size, delay):
                 time.sleep(delay)
 
 
-def main(xmin, xmax, zmin, zmax, height, step_size, delay):
-    x_no_steps = int((xmax - xmin)/step_size) + 1
-    z_no_steps = int((zmax - zmin)/step_size) + 1
+def main(x_min: int, x_max: int, z_min: int, z_max: int, height: int, step_size: int, delay: float) -> None:
+    """
+    Run the execution script. The main purpose of this function (instead of just using
+    `execute_commands`) is to provide the user some info before actually starting the
+    script. It also asks the user for confirmation before beginning to type.
+
+    Parameters
+    ----------
+    x_min : int
+        Starting x-coordinate.
+    x_steps : int
+        Number of steps to take in the x-direction.
+    z_min : int
+        Starting z-coordinate.
+    z_steps : int
+        Number of steps to take in the z-direction.
+    height : int
+        y-coordinate to teleport to.
+    step_size : int
+        How far to step in each direction (except y).
+    delay : float
+        Time in seconds to wait between teleport commands.
+    """
+    x_no_steps = int((x_max - x_min)/step_size) + 1
+    z_no_steps = int((z_max - z_min)/step_size) + 1
     no_of_tps = x_no_steps*z_no_steps
 
     # Approximate the time it will take to run.
@@ -82,6 +144,7 @@ def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     print('Once you continue, you will have 10 seconds before the script begins typing.') 
     print('Remember to make Minecraft the active window before then! \n')
     
+    # Get user confirmation
     answer = input('Do you wish to proceed? [y/n]: ')
     if answer.lower() != 'y':
         print('"n" or invalid answer entered. Aborting.')
@@ -98,7 +161,7 @@ def main(xmin, xmax, zmin, zmax, height, step_size, delay):
     print('Starting teleports...')
     
     start_time = int(time.time())
-    command_executer(xmin, x_no_steps, zmin, z_no_steps, height, step_size, delay)
+    execute_commands(x_min, x_no_steps, z_min, z_no_steps, height, step_size, delay)
     end_time = int(time.time())
     
     hours_taken, minutes_taken, seconds_taken = seconds_to_time(end_time - start_time)
