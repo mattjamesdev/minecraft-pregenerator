@@ -1,6 +1,13 @@
-__pycache__
-.vscode
-.python-version
-.DS_Store
+# Virtual environment
 venv
 .venv
+
+# Python cache
+__pycache__
+
+# Editor
+.vscode
+
+# Misc
+.python-version
+.DS_Store
