@@ -133,33 +133,36 @@ def main(x_min: int, x_max: int, z_min: int, z_max: int, height: int, step_size:
     # Approximate the time it will take to run.
     # If running on macOS, there is a short delay between typing each character, 
     # whereas on Windows the commands are typed out almost instantly. The 
-    # "keydelay" variable is there to accommodate for this. 
+    # `keydelay` variable is there to accommodate for this. 
     keydelay = 0 if platform.system() == 'Windows' else 1
-    hours, minutes, seconds = seconds_to_time(int(4*(delay+keydelay+0.2)*no_of_tps))
+    duration_in_seconds = int(4*(delay+keydelay+0.2)*no_of_tps)
+    hours, minutes, seconds = seconds_to_time(duration_in_seconds)
 
-    print(f'This will teleport to {no_of_tps} different locations.')
-    print(f'It will take approximately {hours}h {minutes}m {seconds}s.\n')
+    print(
+        f'This will teleport to {no_of_tps} different locations.\n'
+        f'It will take approximately {hours}h {minutes}m {seconds}s.\n'
+    )
     time.sleep(1)
-    print('*** IMPORTANT ***')
-    print('Once you continue, you will have 10 seconds before the script begins typing.') 
-    print('Remember to make Minecraft the active window before then! \n')
+    print(
+        '*** IMPORTANT ***\n'
+        'Once you continue, you will have 10 seconds before the script begins typing.\n'
+        'Remember to make Minecraft the active window before then! \n'
+    )
     
     # Get user confirmation
     answer = input('Do you wish to proceed? [y/n]: ')
     if answer.lower() != 'y':
-        print('"n" or invalid answer entered. Aborting.')
+        print("'n' or invalid answer entered. Aborting.")
         return
     
     print('You have 10 seconds to make Minecraft the active window.')
-    time.sleep(7)
-    print('Starting in 3')
-    time.sleep(1)
-    print('Starting in 2')
-    time.sleep(1)
-    print('Starting in 1')
-    time.sleep(1)
+    # Final countdooooooown
+    for i in range(10):
+        print(f"Starting in {10-i}", end="\r")
+        time.sleep(1)
     print('Starting teleports...')
     
+    # Write the commands, recording time taken
     start_time = int(time.time())
     execute_commands(x_min, x_no_steps, z_min, z_no_steps, height, step_size, delay)
     end_time = int(time.time())
