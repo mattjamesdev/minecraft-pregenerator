@@ -19,7 +19,6 @@
 # 90.0 - straight down
 
 import time
-import datetime
 import platform
 
 import keyboard as kb
@@ -38,6 +37,9 @@ def seconds_to_time(seconds: int) -> tuple[int, int, int]:
     (tuple[int, int, int])
         The number of hours, minutes, and seconds.
     """
+    hours, seconds = divmod(seconds, 60*60)
+    minutes, seconds = divmod(seconds, 60)
+    return hours, minutes, seconds
 
 
 # Generate the command to write.
