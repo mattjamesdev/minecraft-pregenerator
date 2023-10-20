@@ -1,42 +1,29 @@
 # Unit tests for script.py
 
+import pytest
+
 from minecraft_pregenerator.script import seconds_to_time
 
 
 class TestSecondsToTime:
     """
-    Unit tests for script.py
+    Unit tests for seconds_to_time
     """
 
-    expected_assert_msg = "Expected {}, got {}"
-    
-    def test_output_1(self):
-        test_input = 0
-        expected = (0, 0, 0)
+    @pytest.mark.parametrize(
+        "test_input, expected",
+        [
+            (0, (0, 0, 0)),
+            (10, (0, 0, 10)),
+            (60, (0, 1, 0)),
+            (3600, (1, 0, 0)),
+            (3661, (1, 1, 1)),
+        ]
+    )
+    def test_output(self, test_input, expected):
+        """
+        Test output value.
+        """
         actual = seconds_to_time(test_input)
-        assert expected == actual, self.expected_assert_msg.format(expected, actual)
-
-    def test_output_2(self):
-        test_input = 10
-        expected = (0, 0, 10)
-        actual = seconds_to_time(test_input)
-        assert expected == actual, self.expected_assert_msg.format(expected, actual)
-
-    def test_output_3(self):
-        test_input = 60
-        expected = (0, 1, 0)
-        actual = seconds_to_time(test_input)
-        assert expected == actual, self.expected_assert_msg.format(expected, actual)
-
-    def test_output_4(self):
-        test_input = 3600
-        expected = (1, 0, 0)
-        actual = seconds_to_time(test_input)
-        assert expected == actual, self.expected_assert_msg.format(expected, actual)
-
-    def test_output_5(self):
-        test_input = 3661
-        expected = (1, 1, 1)
-        actual = seconds_to_time(test_input)
-        assert expected == actual, self.expected_assert_msg.format(expected, actual)
+        assert expected == actual, f"Expected {expected}, got {actual}"
 
