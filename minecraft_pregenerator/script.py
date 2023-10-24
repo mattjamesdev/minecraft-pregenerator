@@ -176,7 +176,7 @@ def main(
     print("You have 10 seconds to make Minecraft the active window.")
     # Final countdooooooown
     for i in range(10):
-        print(f"Starting in {10-i}", end="\r")
+        print(f"Starting in {10-i}", end=" \r")
         time.sleep(1)
     print("Starting teleports...")
 
