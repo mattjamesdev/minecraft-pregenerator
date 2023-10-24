@@ -24,12 +24,22 @@ is rotated in all four compass directions (North, East, South, then West) and
 waits a given amount of time between teleports, to give Minecraft the best 
 opportunity to generate chunks around the player's location. 
 
-## Running the script
+## Running the program
 
-To run this script for yourself, make sure you have Python 3 installed. You 
-will also need the `keyboard` module, which you can get with:
+To run this program for yourself, make sure you have Python 3 installed. You 
+will also need the `keyboard` module, which you can get using `pip`. *Note it
+is recommended to create a virtual environment first*.
 
     pip3 install keyboard
+
+Now you can run the module with Python.
+
+    python3 -m minecraft_pregenerator
+
+This will take you through a command line interface where you can enter your
+desired values for the different parameters.
+
+### Run without the interface using default values
 
 By default, the script is set to teleport the player over an area of 5760x5760 
 centred on the origin. Teleports are spaced 240 blocks apart, and it waits for 
@@ -38,15 +48,8 @@ default settings, then you only need to download `script.py` and run it:
 
     python3 script.py
 
-### Custom values
-
-If you want to enter custom values for the coordinates, teleport spacing, and 
-teleport delay, you should also download `interface.py`. Make sure it is in 
-the same directory as `script.py`, then run `interface.py`:
-
-    python3 interface.py
-
 ### IMPORTANT NOTE
 
 Once you answer `y` in the script, you will have 10 seconds to make Minecraft 
 the active window before the script starts typing the commands!
+
