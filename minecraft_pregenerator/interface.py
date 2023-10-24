@@ -1,6 +1,6 @@
 # Command line interface for entering custom values for coordinates.
 
-from script import confirm_and_run
+from minecraft_pregenerator.script import confirm_and_run
 
 
 def validate_input(prompt: str, default: int, err: str = "Invalid input") -> int:
@@ -98,6 +98,3 @@ def main():
     # Run the commands
     confirm_and_run(x_min, x_max, z_min, z_max, height, step_size, delay)
 
-
-if __name__ == "__main__":
-    main()
