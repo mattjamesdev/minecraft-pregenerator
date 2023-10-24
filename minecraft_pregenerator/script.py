@@ -113,7 +113,7 @@ def execute_commands(
                 time.sleep(delay)
 
 
-def main(
+def confirm_and_run(
     x_min: int,
     x_max: int,
     z_min: int,
@@ -191,4 +191,4 @@ def main(
 
 if __name__ == "__main__":
     # Format: (xmin, xmax, zmin, zmax, no of blocks between tps, tp delay in seconds)
-    main(-2880, 2880, -2880, 2880, 192, 240, 2)
+    confirm_and_run(-2880, 2880, -2880, 2880, 192, 240, 2)

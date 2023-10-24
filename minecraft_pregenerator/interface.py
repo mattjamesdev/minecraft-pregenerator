@@ -1,66 +1,103 @@
 # Command line interface for entering custom values for coordinates.
-from script import main
 
-welcome_text = """\
-Welcome to Minecraft World Pre-generator! This script will generate a series of 
-/tp commands and automatically enter them for you. Make sure you have Minecraft 
-running in the world you want to pre-generate before you activate this script. \n"""
+from script import confirm_and_run
 
 
-def interface():
-    print(welcome_text)
+def validate_input(prompt: str, default: int, err: str = "Invalid input") -> int:
+    """
+    Get integer input from the user. If input cannot be converted to an integer,
+    ask the user for input again. If no input is entered, return a default value.
+
+    Parameters
+    ----------
+    prompt : str
+        Input prompt to display.
+    default : int
+        Default value to use if no input is entered.
+    err : str
+        Message to display when input is invalid. Default "Invalid input".
+
+    Return
+    ------
+    int
+        The user's valid input.
+    """
+    # Get input until the input is valid
     while True:
+        user_input = input(prompt)
+        if user_input == "":
+            return default
         try:
-            # Get the coordinates and values from user input.
-            # If there is no input, set it to the default value.
-            # For the coordinates, check that the min is less than the max.
-            xmin_input = input("Enter a minimum x-coordinate (default -2880): ")
-            xmin = int(xmin_input) if xmin_input else -2880
-            xmax_input = input("Enter a maximum x-coordinate (default 2880): ")
-            xmax = int(xmax_input) if xmax_input else 2880
-            if xmax <= xmin:
-                print("Maximum must be greater than minimum.")
-                continue
-            zmin_input = input("Enter a minimum z-coordinate (default -2880): ")
-            zmin = int(zmin_input) if zmin_input else -2880
-            zmax_input = input("Enter a maximum z-coordinate (default 2880): ")
-            zmax = int(zmax_input) if zmax_input else 2880
-            if zmax <= zmin:
-                print("Maximum must be greater than minimum.")
-                continue
-
-            height_input = input(
-                "Enter a height (y-value) greater than 0 (default 192): "
-            )
-            height = int(height_input) if height_input else 192
-            if height <= 0:
-                print("Height must be greater than 0.")
-                continue
-
-            # When getting the step size, also check that it is positive.
-            while True:
-                step_size_input = input(
-                    "Enter a teleport step size, the distance between teleports in blocks \n(default 240): "
-                )
-                step_size = int(step_size_input) if step_size_input else 240
-                if step_size <= 0:
-                    print("Teleport step size must be a positive whole number.")
-                    continue
-                break
-
-            delay_input = input(
-                "Enter a time to wait between teleports in seconds (default 2): "
-            )
-            delay = int(delay_input) if delay_input else 2
-            print()
-            break
+            return int(user_input)
         except ValueError:
-            print("Invalid input: please enter a whole number.")
-            print()
-            continue
+            print(err)
 
-    main(xmin, xmax, zmin, zmax, height, step_size, delay)
+
+def main():
+    """
+    Run the interactive interface, allowing the user to input custom values for
+    the parameters.
+    """
+    welcome_text = (
+        "Welcome to Minecraft World Pre-generator! This script will generate a series of\n"
+        "/tp commands and automatically enter them for you. Make sure you have Minecraft\n"
+        "running in the world you want to pre-generate before you activate this script.\n"
+    )
+    print(welcome_text)
+
+    # Get x-range, checking that the first is less than the second
+    while True:
+        x_min = validate_input("Enter a minimum x-coordinate (default -2880): ", -2880)
+        x_max = validate_input("Enter a maximum x-coordinate (default 2880): ", 2880)
+        if x_min < x_max:
+            break
+        else:
+            print("Maximum must be greater than minimum.")
+
+    # Get z-range, checking that the first is less than the second
+    while True:
+        z_min = validate_input("Enter a minimum z-coordinate (default -2880): ", -2880)
+        z_max = validate_input("Enter a maximum z-coordinate (default 2880): ", 2880)
+        if z_min < z_max:
+            break
+        else:
+            print("Maximum must be greater than minimum.")
+
+    # Get y-coordinate, checking that it is greater than 0
+    while True:
+        height = validate_input(
+            "Enter a height (y-value) greater than 0 (default 192): ", 192
+        )
+        if height > 0:
+            break
+        else:
+            print("Height must be greater than 0.")
+
+    # Get the step size, checking that it is positive.
+    while True:
+        step_size = validate_input(
+            "Enter a teleport step size, the distance between teleports in blocks (default 240): ",
+            240,
+        )
+        if step_size > 0:
+            break
+        else:
+            print("Teleport step size must be a positive whole number.")
+
+    while True:
+        delay = validate_input(
+            "Enter a time (in seconds) to wait between teleports in seconds (default 2): ",
+            2,
+        )
+        if delay > 0:
+            break
+        else:
+            print("Delay must be greater than 0 seconds.")
+    print()
+
+    # Run the commands
+    confirm_and_run(x_min, x_max, z_min, z_max, height, step_size, delay)
 
 
 if __name__ == "__main__":
-    interface()
+    main()
